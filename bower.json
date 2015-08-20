@@ -1,0 +1,22 @@
+{
+  "name": "jira-item-form",
+  "version": "0.0.8",
+  "authors": [
+    "Jack Balbes <jack.balbes@oasisdigital.com>"
+  ],
+  "description": "A lib for creating forms that create JIRA items upon submission",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "JIRA"
+  ],
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/oasisdigital/jira-inquiry-form",
+  "ignore": [
+    "app",
+    ".gitignore",
+    "bower.json",
+    "gulpfile.js",
+    "package.json"
+  ]
+}

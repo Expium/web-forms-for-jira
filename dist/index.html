@@ -1,0 +1,88 @@
+
+<title>JIRA Item Creation Form Example</title>
+<body>
+  <link href="od-jira-form-styles-without-bootstrap.css" rel="stylesheet"/>
+  <h1>This is an example of how to use the generic JIRA item creation form</h1>
+  <div id="inquiry1" inquiry-form="inquiry-form" class="inquiry-form"></div>
+  <!-- If you want additional forms on the page, you just need to add them with their own IDs-->
+  <!-- #inquiry2(inquiry-form)-->
+  <script defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.min.js"></script>
+  <script defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-messages.min.js"></script>
+  <script>
+    var jiraConfig =  {
+        "errorContact": 'error@example.com',
+        "title": "Sample Issue Creation Form",
+        "inquiryIds": [
+            "inquiry1"
+            //,"inquiry2"
+        ],
+        "proxyUrl": "/jira-form-proxy.php?url=",
+        "server": "https://your-site.atlassian.net",
+        "inquiryDumpFieldJiraName": "description",
+        "inquiryDumpField": "description",
+        "formFields": [
+            {
+                // What the form input will be labeled with
+                "name": "Item Name",
+                // If the field is required
+                "required": true,
+                // The type of input
+                "type": "text",
+                // The internal name where the selection is stored
+                "inquiryField": "name"
+            },
+            {
+                "name": "Type",
+                "type": "select",
+                "options": [
+                    "Bug",
+                    "New Feature"
+                ],
+                "inquiryField": "issueType"
+            }
+        ],
+        "commonFields": {
+            //This is where you list fields in JIRA are common to all of the issue types
+            "customfield_XXXXX": {
+                // This field doesn't do anything mechanically, but is useful to remember the human friendly name
+                "jiraName": "A Custom Field",
+                "value": "Set the value if it is always the same",
+                // Set inquiryField to have the value in JIRA be set to this value
+                "inquiryField": "name",
+                // Some JIRA data types are required to be enclosed in an
+                // object of the form { value: "entry" }. This will automatically
+                // enclose the data in that object
+                "encloseInObject": true,
+                // Set this to map between values that are set in the form
+                // and those that are set in the JIRA item
+                "map": {
+                    "option1": "JIRAValue1",
+                    "option2": "JIRAValue2"
+                }
+            },
+        },
+        // List the different types of issues you would like to create
+        issueTypes: {
+            "Bug": {
+                // You can specify the relation to custom fields in the
+                // same way as with the common fields
+                "customfield_YYYY": {
+                    "value": "It be broke"
+                }
+            },
+            "New Feature": {}
+        },
+        // Tell the plugin how to differentiate between different issue types
+        issueType: function issueType(inquiry) {
+            if (inquiry.issueType == 'Bug') {
+                return 'Bug';
+            } else {
+                return 'New Feature';
+            }
+        },
+        "summary": "name",
+        "projectKey": "PJCT"
+    };
+  </script>
+  <script defer="defer" src="od-jira-form-app.js"></script>
+</body>

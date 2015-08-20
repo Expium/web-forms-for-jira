@@ -1,0 +1,30 @@
+{
+  "name": "jira-item-form",
+  "version": "0.0.8",
+  "description": "Angular form for sticking in websites to take inquiries and post to a JIRA instance",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OasisDigital/jira-item-form"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oasis Digital",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^1.2.1",
+    "gulp": "^3.9.0",
+    "gulp-angular-templates": "0.0.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-less": "^3.0.3",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-uglify": "^1.2.0",
+    "gulp-uncss": "^1.0.3"
+  },
+  "files": [
+    "dist"
+  ]
+}

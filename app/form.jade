@@ -1,0 +1,74 @@
+span(ng-show="inquiryController.showFailureMessage")
+    h2 Something went wrong. If you continue to see this message, please contact us at {{inquiryController.failureContact}}
+.well.bs-component(ng-show="!inquiryController.showFailureMessage")
+    form.form-horizontal#ss-form(name='ssForm', ng-submit='inquiryController.submit()', novalidate)
+        fieldset
+            legend Request Training Information
+            .form-group(ng-repeat='input in inquiryController.config.formFields', ng-switch="input.type")
+                span(ng-switch-when="checkbox")
+                    span.col-sm-4.left-checkbox
+                        input(type='checkbox', ng-true-value="'Yes'", ng-false-value="'No'", name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required")
+                    label.col-sm-8(for='{{input.inquiryField}}')
+                    | {{input.name}}
+                span(ng-switch-when="prelabel")
+                    .col-sm-4
+                    .col-sm-8
+                        | {{input.name}}
+                span(ng-switch-when="freeformText")
+                    label.col-sm-4.control-label
+                        | {{input.name}}
+                        span.required(ng-if='input.required') *
+                        span(ng-if='::!input.hideColon') :
+                    .col-sm-8
+                        textarea.form-control.big-text-box(name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required")
+                span(ng-switch-default)
+                    label.col-sm-4.control-label(for='{{input.inquiryField}}')
+                        | {{input.name}}
+                        span.required(ng-if='input.required') *
+                        span(ng-if='::!input.hideColon') :
+                    .col-sm-8
+                        span(ng-switch="input.type")
+                            span(ng-switch-when="label")
+                            span(ng-switch-when="select")
+                                select.form-control(name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]')
+                                    option(ng-repeat="value in input.options" value='{{value}}' ng-bind="value")
+                            span(ng-switch-when="text")
+                                input.form-control(type='{{input.type}}', name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required", maxlength="100")
+                                div(ng-messages='ssForm[input.inquiryField].$error', class='text-warning', role='alert')
+                                    div(ng-message='required', ng-if='ssForm[input.inquiryField].$touched')
+                                        | {{input.name}} is required
+                                    div(ng-message='minlength')
+                                        | Email format appears incorrect, please check
+                            span(ng-switch-when="email")
+                                input.form-control(type='email', name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required", maxlength="100")
+                                div(ng-messages='ssForm[input.inquiryField].$error', class='text-warning', role='alert')
+                                    div(ng-message='required', ng-if='ssForm[input.inquiryField].$touched')
+                                        | {{input.name}} is required
+                                    div(ng-message='minlength')
+                                        | {{input.name}} is too short
+                                    div(ng-message='email')
+                                        | Email format appears incorrect, please check
+                            span(ng-switch-when="number")
+                                input.form-control(type='number', name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required", maxlength="100")
+                                div(ng-messages='ssForm[input.inquiryField].$error', class='text-warning', role='alert')
+                                    div(ng-message='required', ng-if='ssForm[input.inquiryField].$touched')
+                                        | {{input.name}} is required
+                            span(ng-switch-when="tel")
+                                input.form-control(type='tel', name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required")
+                                div(ng-messages='ssForm[input.inquiryField].$error', class='text-warning', role='alert')
+                                    div(ng-message='required', ng-if='ssForm[input.inquiryField].$touched')
+                                        | {{input.name}} is required
+                            span(ng-switch-default)
+                                span {{input.name}} {{input.type}}
+            span.text-success(ng-bind='inquiryController.message.success')
+            span.text-danger( ng-show="inquiryController.message.error", ng-bind='inquiryController.message.error + " If you continue to see this error, contact us at " + inquiryController.failureContact', role='alert')
+            .form-group
+                .col-sm-8.col-sm-push-4
+                    input(type='hidden', name='draftResponse', value='[]\
+                    ')
+                    input(type='hidden', name='pageHistory', value='0')
+                    br
+                    input.btn.btn-primary#ss-submit(type='submit', name='submit', value='{{inquiryController.submitting ? "Submitting" : "Submit"}}', ng-disabled='ssForm.$invalid || inquiryController.submitting')
+            span.col-sm-8.col-sm-offset-4
+                span.required *
+                | Indicates a required field

@@ -1,0 +1,3 @@
+node_modules
+build
+app/jira-form-proxy-config.php
