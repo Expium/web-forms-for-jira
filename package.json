@@ -1,6 +1,6 @@
 {
   "name": "jira-item-form",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Angular form for sticking in websites to take inquiries and post to a JIRA instance",
   "repository": {
     "type": "git",
