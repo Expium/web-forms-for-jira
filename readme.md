@@ -103,8 +103,7 @@ according to the inquiryField names. It should return a string that matches a
 issue type specified in the issueTypes object.
 
 summary - Either a string, or a function that takes the inquiry object and
-returns a string that is the name of the field to use as the overall name
-of the created item.
+returns a string to use as the overall name of the created item.
 
 projectKey - Either a string, or a function that takes the inquiry object and
 returns a string that is the key for the project that you want the form to
