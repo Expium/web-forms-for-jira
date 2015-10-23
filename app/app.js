@@ -48,6 +48,9 @@
     .service('JIRA', function ($http, $filter) {
       this.submitRequest = function (inquiry) {
         var config = jiraConfig;
+        if (jiraConfig.onSubmit) {
+          jiraConfig.onSubmit();
+        }
         config.encloseInObject = function (field) {
           return { value: field };
         };

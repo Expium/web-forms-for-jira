@@ -109,3 +109,5 @@ of the created item.
 projectKey - Either a string, or a function that takes the inquiry object and
 returns a string that is the key for the project that you want the form to
 create items in
+
+onSubmit - A function that, if provided, will be called when the form is submitted.
