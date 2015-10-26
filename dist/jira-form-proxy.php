@@ -1,6 +1,19 @@
 <?php
 // Change these configuration options if needed
 include 'jira-form-proxy-config.php';
+
+function exceptions_error_handler($severity, $message, $filename, $lineno) {
+  if (error_reporting() == 0) {
+    return;
+  }
+  if (error_reporting() & $severity) {
+    throw new ErrorException($message, 0, $severity, $filename, $lineno);
+  }
+}
+set_error_handler('exceptions_error_handler');
+error_reporting(E_ALL ^ E_STRICT);
+
+
 // If someone GETs this file, return an error message
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     echo "JIRA issue creator backend proxy script";
