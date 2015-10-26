@@ -85,3 +85,7 @@ gulp.task('uncss', ['jade'], function(cb) {
         }))
         .pipe(gulp.dest('./dist'));
 });
+
+gulp.task('dev', ['build'], function () {
+    gulp.src('./dist/*').pipe(gulp.dest('./dev'));
+});

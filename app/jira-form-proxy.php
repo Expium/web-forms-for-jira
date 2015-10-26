@@ -1,18 +1,11 @@
 <?php
 // Change these configuration options if needed
 include 'jira-form-proxy-config.php';
-
 // If someone GETs this file, return an error message
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     echo "JIRA issue creator backend proxy script";
     return;
 }
-
-function exception_error_handler($errno, $errstr, $errfile, $errline ) {
-    throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
-}
-set_error_handler("exception_error_handler");
-
 
 $rand = rand ( 10000 , 99999 );
 $date = new DateTime();
@@ -20,7 +13,8 @@ $requestOrigin = array_key_exists('HTTP_REFERER', $_SERVER) ? $_SERVER['HTTP_REF
 preg_match('~https?://(.*)/.*~i', $requestOrigin, $m );
 $sanitizedOrigin = count($m) >= 2 ? str_replace('.', '-', $m[1]) : 'unknownOrigin';
 $sanitizedOrigin = str_replace('/', '-slash-', $sanitizedOrigin);
-file_put_contents($log_file_directory . $sanitizedOrigin . '-' . $date->format('Y-m-d-H-i-s') . '-' . $rand . '.txt', file_get_contents('php://input'), FILE_APPEND | LOCK_EX);
+$filename = $log_file_directory . $sanitizedOrigin . '-' . $date->format('Y-m-d-H-i-s') . '-' . $rand . '.txt';
+$logged = file_put_contents($filename, file_get_contents('php://input'), FILE_APPEND | LOCK_EX);
 
 if (!function_exists('http_response_code')) {
     function http_response_code($code = NULL) {
@@ -103,6 +97,9 @@ if ( !$url ) {
 } else if ( !preg_match( $valid_url_regex, $url ) ) {
     $contents = 'ERROR: invalid url \"' . $url . '\"';
     $status = array( 'http_code' => 403 );
+} else if (!$logged) {
+    $contents = 'Unable to log to provided directory';
+    $status = array( 'http_code' => 500 );
 } else {
     $ch = curl_init();
     curl_setopt_array($ch, array(
