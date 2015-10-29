@@ -1,30 +1,19 @@
 Project for creating a generic JIRA issue creation form
 
-Modify the sample index.jade file to point to your JIRA instance, and to use
-your custom fields. Then, to build run:
+This module uses AngularJS and Angular Messages to interact with the page. See
+the provided index.html for CDNs for both.
 
-```
-npm install
-gulp build
-```
+To use this module with an Angular app, load it on the page, and then depend
+on the 'jiracreate' module. You can then use the inquiryForm attribute directive
+anywhere on the page.
 
-To view an example app:
+To use this module without Angular, load it on to the page, and then use an ID
+to mark where you want the module to bootstrap itself. Include this ID in the 
+jiraConfig, see below. Then, inside that element, put the inquiry-form attribute
+where you want the form.
 
-```
-gulp serve
-```
-
-Note that gulp will only serve the web application portion of this repository.
-In order to have it work end to end, you will need to either set up your own
-proxy to your JIRA instance, or use the php proxy provided.
-
-If you are using this code by itself, you can mark an element with an ID,
-as specified in inquiryIds, and add the inquiry-form attribute and class to it.
-For an example, see index.jade.
-
-If you are using this code as part of an AngularJS application, you should
-include the AngularJS module in your project, and use the directive directly,
-no IDs needed.
+In both cases, you should add the inquiry-form class to the same element to 
+benefit from the custom CSS provided in jira-form-styles.css.
 
 The configuration object:
 
@@ -110,3 +99,23 @@ returns a string that is the key for the project that you want the form to
 create items in
 
 onSubmit - A function that, if provided, will be called when the form is submitted.
+
+For Developers:
+
+Modify the sample index.jade file to point to your JIRA instance, and to use
+your custom fields. Then, to build run:
+
+```
+npm install
+gulp build
+```
+
+To view an example app:
+
+```
+gulp serve
+```
+
+Note that gulp will only serve the web application portion of this repository.
+In order to have it work end to end, you will need to either set up your own
+proxy to your JIRA instance, or use the php proxy provided.
