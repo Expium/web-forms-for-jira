@@ -12,7 +12,14 @@ function exceptions_error_handler($severity, $message, $filename, $lineno) {
 }
 set_error_handler('exceptions_error_handler');
 error_reporting(E_ALL ^ E_STRICT);
+ini_set('display_errors', 0);
 
+register_shutdown_function(function() {
+    $error = error_get_last();
+    if ($error['type'] == E_ERROR) {
+        header('HTTP/1.1 500 Internal Server Error');
+    }
+});
 
 // If someone GETs this file, return an error message
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
