@@ -7,7 +7,8 @@ var gulp = require("gulp"),
     templateBundler = require("gulp-angular-templates"),
     del = require('del'),
     less = require('gulp-less'),
-    uncss = require('gulp-uncss');
+    uncss = require('gulp-uncss'),
+    rename = require('gulp-rename');
 
 
 gulp.task('serve', function () {
@@ -16,7 +17,7 @@ gulp.task('serve', function () {
     });
 });
 
-gulp.task('build', ['minifyJs', 'copyHtml', 'copyPhp', 'less']);
+gulp.task('build', ['minifyJs', 'copyHtml', 'copyPhp', 'less', 'copyJS']);
 
 gulp.task('clean', function (cb) {
     del([
@@ -62,8 +63,14 @@ gulp.task('annotate', ['concat'], function () {
 gulp.task('minifyJs', ['annotate'], function (){
     return gulp.src('./build/jira-form-app.js')
         .pipe(uglify())
+        .pipe(rename('jira-form-app.min.js'))
         .pipe(gulp.dest('dist'));
 });
+
+gulp.task('copyJS', ['annotate'], function () {
+    return gulp.src('./build/jira-form-app.js')
+        .pipe(gulp.dest('dist'));
+})
 
 gulp.task('copyPhp', ['clean'], function () {
     gulp.src('./app/*.php')
