@@ -33,7 +33,7 @@ span(ng-show="inquiryController.showFailureMessage")
                                 select.form-control(name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]')
                                     option(ng-repeat="value in input.options" value='{{value}}' ng-bind="value")
                             span(ng-switch-when="text")
-                                input.form-control(type='{{input.type}}', name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required", maxlength="100")
+                                input.form-control(type='{{input.type}}', placeholder='{{input.placeholder}}', name='{{input.inquiryField}}', ng-model='inquiryController.inquiry[input.inquiryField]', ng-required="input.required", maxlength="100")
                                 div(ng-messages='ssForm[input.inquiryField].$error', class='text-warning', role='alert')
                                     div(ng-message='required', ng-if='ssForm[input.inquiryField].$touched')
                                         | {{input.name}} is required
