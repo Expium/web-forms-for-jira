@@ -61,6 +61,8 @@ look like. Each object has a number of fields.
 
     options - An array of strings that are the options for the dropdown for an
     input of type select
+    
+    placeholder - The string that will be the placeholder text for text inputs
 
 commonFields - An object whose fields are objects describing the JIRA fields that
 are common accross all the types of issues that this form will create. The name
