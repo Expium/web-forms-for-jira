@@ -3,7 +3,7 @@ span(ng-show="inquiryController.showFailureMessage")
 .well.bs-component(ng-show="!inquiryController.showFailureMessage")
     form.form-horizontal#ss-form(name='ssForm', ng-submit='inquiryController.submit()', novalidate)
         fieldset
-            legend Request Training Information
+            legend {{inquiryController.config.title}}
             .form-group(ng-repeat='input in inquiryController.config.formFields', ng-switch="input.type")
                 span(ng-switch-when="checkbox")
                     span.col-sm-4.left-checkbox
