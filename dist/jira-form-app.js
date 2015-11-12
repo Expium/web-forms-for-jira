@@ -8,15 +8,15 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
   angular.module('jiracreate', ['ngMessages', 'templates'])
     .controller('InquiryController', ["JIRA", "$scope", "validateConfig", function (JIRA, $scope, validateConfig) {
       var that = this;
+      that.config = angular.isString($scope.config) ? window[$scope.config] : $scope.config;
       var defaultInquiry = {};
       that.inquiry = angular.copy(defaultInquiry);
       that.message = {};
-      that.failureContact = jiraConfig.errorContact
-      if (!validateConfig(jiraConfig)) {
+      that.failureContact = that.config.errorContact
+      if (!validateConfig(that.config)) {
         that.showFailureMessage = true;
         return;
       }
-      that.config = jiraConfig;
       angular.forEach(that.config.formFields, function (f) {
         if (f.default) {
           that.inquiry[f.inquiryField] = f.default;
@@ -36,7 +36,7 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
         that.message.error = undefined;
         that.submitting = true;
 
-        JIRA.submitRequest(that.inquiry)
+        JIRA.submitRequest(that.inquiry, that.config)
           .then(function () {
             that.message.success = 'Request has been submitted successfully';
             that.inquiry = angular.copy(defaultInquiry);
@@ -50,10 +50,9 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
       };
     }])
     .service('JIRA', ["$http", "$filter", function ($http, $filter) {
-      this.submitRequest = function (inquiry) {
-        var config = jiraConfig;
-        if (jiraConfig.onSubmit) {
-          jiraConfig.onSubmit();
+      this.submitRequest = function (inquiry, config) {
+        if (config.onSubmit) {
+          config.onSubmit();
         }
         config.encloseInObject = function (field) {
           return { value: field };
@@ -100,9 +99,12 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
     }])
     .directive('inquiryForm', function () {
       return {
-        restrict: 'A',
+        restrict: 'E',
         templateUrl: 'form.html',
         controller: 'InquiryController as inquiryController',
+        scope: {
+          config: "="
+        }
       };
     })
     .factory('validateConfig', function () {
@@ -167,8 +169,8 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
   if (appElems.length == 0) {
     // Manually bootstrap onto element since there are no auto bootstrapped apps to do it for us
     angular.element(document).ready(function () {
-      angular.forEach(jiraConfig.inquiryIds, function (id) {
-        angular.bootstrap(document.getElementById(id), ['jiracreate']);
+      angular.forEach(document.getElementsByTagName('inquiry-form'), function (el) {
+        angular.bootstrap(el, ['jiracreate']);
       });
     });
   }

@@ -256,13 +256,13 @@
 .inquiry-form .form-horizontal .form-group:after {
   clear: both;
 }
-.inquiry-form .required {
+inquiry-form .required {
   color: red;
 }
-.inquiry-form .left-checkbox {
+inquiry-form .left-checkbox {
   text-align: right;
   padding-top: 4px;
 }
-.inquiry-form .big-text-box {
+inquiry-form .big-text-box {
   height: 120px;
 }

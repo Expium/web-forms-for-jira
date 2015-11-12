@@ -4,15 +4,15 @@
   angular.module('jiracreate', ['ngMessages', 'templates'])
     .controller('InquiryController', function (JIRA, $scope, validateConfig) {
       var that = this;
+      that.config = angular.isString($scope.config) ? window[$scope.config] : $scope.config;
       var defaultInquiry = {};
       that.inquiry = angular.copy(defaultInquiry);
       that.message = {};
-      that.failureContact = jiraConfig.errorContact
-      if (!validateConfig(jiraConfig)) {
+      that.failureContact = that.config.errorContact
+      if (!validateConfig(that.config)) {
         that.showFailureMessage = true;
         return;
       }
-      that.config = jiraConfig;
       angular.forEach(that.config.formFields, function (f) {
         if (f.default) {
           that.inquiry[f.inquiryField] = f.default;
@@ -32,7 +32,7 @@
         that.message.error = undefined;
         that.submitting = true;
 
-        JIRA.submitRequest(that.inquiry)
+        JIRA.submitRequest(that.inquiry, that.config)
           .then(function () {
             that.message.success = 'Request has been submitted successfully';
             that.inquiry = angular.copy(defaultInquiry);
@@ -46,10 +46,9 @@
       };
     })
     .service('JIRA', function ($http, $filter) {
-      this.submitRequest = function (inquiry) {
-        var config = jiraConfig;
-        if (jiraConfig.onSubmit) {
-          jiraConfig.onSubmit();
+      this.submitRequest = function (inquiry, config) {
+        if (config.onSubmit) {
+          config.onSubmit();
         }
         config.encloseInObject = function (field) {
           return { value: field };
@@ -96,9 +95,12 @@
     })
     .directive('inquiryForm', function () {
       return {
-        restrict: 'A',
+        restrict: 'E',
         templateUrl: 'form.html',
         controller: 'InquiryController as inquiryController',
+        scope: {
+          config: "="
+        }
       };
     })
     .factory('validateConfig', function () {
@@ -163,8 +165,8 @@
   if (appElems.length == 0) {
     // Manually bootstrap onto element since there are no auto bootstrapped apps to do it for us
     angular.element(document).ready(function () {
-      angular.forEach(jiraConfig.inquiryIds, function (id) {
-        angular.bootstrap(document.getElementById(id), ['jiracreate']);
+      angular.forEach(document.getElementsByTagName('inquiry-form'), function (el) {
+        angular.bootstrap(el, ['jiracreate']);
       });
     });
   }

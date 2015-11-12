@@ -3,7 +3,7 @@
 <body>
   <link href="jira-form-styles-without-bootstrap.css" rel="stylesheet"/>
   <h1>This is an example of how to use the generic JIRA item creation form</h1>
-  <div id="inquiry1" inquiry-form="inquiry-form" class="inquiry-form"></div>
+  <inquiry-form config="&quot;jiraConfig&quot;"></inquiry-form>
   <!-- If you want additional forms on the page, you just need to add them with their own IDs-->
   <!-- #inquiry2(inquiry-form)-->
   <script defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.min.js"></script>
@@ -12,10 +12,6 @@
     var jiraConfig =  {
         "errorContact": 'error@example.com',
         "title": "Sample Issue Creation Form",
-        "inquiryIds": [
-            "inquiry1"
-            //,"inquiry2"
-        ],
         "proxyUrl": "/jira-form-proxy.php?url=",
         "server": "https://your-site.atlassian.net",
         "inquiryDumpFieldJiraName": "description",

@@ -7,26 +7,21 @@ To use this module with an Angular app, load it on the page, and then depend
 on the 'jiracreate' module. You can then use the inquiryForm attribute directive
 anywhere on the page.
 
-To use this module without Angular, load it on to the page, and then use an ID
-to mark where you want the module to bootstrap itself. Include this ID in the 
-jiraConfig, see below. Then, inside that element, put the inquiry-form attribute
-where you want the form.
-
-In both cases, you should add the inquiry-form class to the same element to 
-benefit from the custom CSS provided in jira-form-styles.css.
+To use this module without Angular, load this script and its css on to the page,
+and use the inquiry-form element where ever you need this form.
 
 The configuration object:
 
-The configuration for this should be contained in the global variable 
-'jiraConfig'. It has many fields:
+The configuration for this should be contained in an object. It is passed to the
+directive via the config attribute of the inquriy-form element. If a string is 
+passed, the directive will look for an global variable with that name and use 
+that. This is usefull if you are using this directive as a stand alone thing,
+without other Angular things. This configuration object has many fields:
 
 title - A string that is the title that will appear at the top of the form
 
 errorContact - A string that is the contact information that you want to display
 if something goes wrong.
-
-inquiryIds - An array of strings that are the html IDs that identify where the 
-form should bootstrap itself, for if you are not using angular on your page.
 
 proxyUrl - The relative path to the proxy you set up to JIRA
 
