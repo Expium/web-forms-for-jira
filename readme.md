@@ -4,7 +4,7 @@ This module uses AngularJS and Angular Messages to interact with the page. See
 the provided index.html for CDNs for both.
 
 To use this module with an Angular app, load it on the page, and then depend
-on the 'jiracreate' module. You can then use the inquiryForm attribute directive
+on the 'jiracreate' module. You can then use the inquiryForm element directive
 anywhere on the page.
 
 To use this module without Angular, load this script and its css on to the page,

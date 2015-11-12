@@ -37,6 +37,12 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
         that.submitting = true;
 
         JIRA.submitRequest(that.inquiry, that.config)
+          .then(function (response){
+            var data = response.data;
+            if (!(angular.isObject(data) && angular.isString(data.self) && angular.isString(data.key)&& angular.isString(data.id))) {
+              throw 'Got success, but response does not match expectation.';
+            }
+          })
           .then(function () {
             that.message.success = 'Request has been submitted successfully';
             that.inquiry = angular.copy(defaultInquiry);
