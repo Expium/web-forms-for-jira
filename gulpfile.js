@@ -13,7 +13,7 @@ var gulp = require("gulp"),
 
 gulp.task('serve', function () {
     connect.server({
-        root: 'dist'
+        root: 'dev'
     });
 });
 
@@ -35,7 +35,7 @@ gulp.task('jade', ['clean'], function () {
 });
 
 gulp.task('copyHtml',['jade'], function () {
-    gulp.src(['./build/index.html', './build/abc-example.html', './build/prospect-example.html'])
+    gulp.src(['./build/sample-index.html','./build/sample-index-2.html', './build/abc-example.html', './build/prospect-example.html'])
         .pipe(gulp.dest('./dist'));
 });
 

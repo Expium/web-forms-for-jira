@@ -3,20 +3,60 @@ Project for creating a generic JIRA issue creation form
 This module uses AngularJS and Angular Messages to interact with the page. See
 the provided index.html for CDNs for both.
 
-To use this module with an Angular app, load it on the page, and then depend
-on the 'jiracreate' module. You can then use the inquiryForm element directive
-anywhere on the page.
+There are three pieces included in this library, a simple php proxy, an angular
+service and an angular directive.
 
-To use this module without Angular, load this script and its css on to the page,
-and use the inquiry-form element where ever you need this form.
+To use the proxy, simply serve it where your app can reach it from a server that
+supports php. Rename sample.jira-form-proxy-config.php to jira-form-proxy-config.php
+and change the settings to match your JIRA instalation and log folder. You can use
+your own proxy, we are simply providing this for convienience.
 
-The configuration object:
+To use the angular service, you will need to depend on the 'jiracreate' module and
+configure the 'JIRA' service. The available configuration methods are:
 
-The configuration for this should be contained in an object. It is passed to the
+    setJIRAIssueCreationPath - This sets the path on the JIRA server that creates the 
+    item. It defaults to '/rest/api/2/issue'. You will likely not need to change this
+    setting
+    
+    setServer - This sets the default server that is passed to the proxy as a query
+    parameter. It has no default value.
+    
+    setProxy - This sets the path to the proxy that will be used to pass the request
+    on to JIRA. it defaults to '/jira-form-proxy.php?url=', the proxy that is provided
+    with this library.
+    
+The service has several methods that you can use to help talk to JIRA:
+    createIssue(summary, issueType, project) - creates an item skeleton,
+        based on the parameters passed.
+    postItem = function (item, server, proxy) - Takes an object representing
+        a new JIRA item and posts it to the proxy. If you configured setServer,
+        the server param is optional. The proxy param is always optional.
+        
+See sample-index-2.html for an example of using the service in this way.
+
+The final piece of this library is an angular directive. You can use it as part of
+an Angular application by depending on the jiraForm module, and then pass it either
+a string or an object via the config attribute. If the value passed is a string,
+it will look on the global scope for an object with that name, and use that as
+its configuration object.
+
+You can also use this directive on its own, outside of an angular app. You will
+still need to load angular and ng-messages on the page, but then you can simply
+use the directive as normal. The lib will look through your page for uses of the
+directive, and bootstrap an angular app there to support it. Note that using the
+directive in this way means that you must pass a string to the directive, and
+the config object must be on the global scope. See sample-index.html for an 
+example of how to use the directive in this way. See below for more details on
+the directive configuration object.
+    
+
+The directive configuration object:
+
+The configuration for the directive should be contained in an object. It is passed to the
 directive via the config attribute of the inquriy-form element. If a string is 
 passed, the directive will look for an global variable with that name and use 
-that. This is usefull if you are using this directive as a stand alone thing,
-without other Angular things. This configuration object has many fields:
+that. This is usefull if you are using this directive as a stand alone angular piece,
+without creating your own Angular app. This configuration object has many fields:
 
 title - A string that is the title that will appear at the top of the form
 
@@ -88,8 +128,8 @@ fields
 
 issueType - Either a string, or a function that takes the inquiry object and
 returns a string, that is used to determine the type of the issue to be
-created. It takes an object that has the values in the form as fields, named
-according to the inquiryField names. It should return a string that matches a
+created. It takes as a parameter an object that has the values in the form as fields,
+named according to the inquiryField names. It should return a string that matches a
 issue type specified in the issueTypes object.
 
 summary - Either a string, or a function that takes the inquiry object and
@@ -103,15 +143,17 @@ onSubmit - A function that, if provided, will be called when the form is submitt
 
 For Developers:
 
-Modify the sample index.jade file to point to your JIRA instance, and to use
-your custom fields. Then, to build run:
-
+To test contributions to this repository, run 
 ```
 npm install
-gulp build
+gulp dev
 ```
 
-To view an example app:
+Inside the dev folder this creates, you can create an index.html file that uses
+this library and points to your JIRA instance. You can also create your
+jira-form-proxy-config.php here.
+
+To view your app:
 
 ```
 gulp serve
@@ -119,4 +161,5 @@ gulp serve
 
 Note that gulp will only serve the web application portion of this repository.
 In order to have it work end to end, you will need to either set up your own
-proxy to your JIRA instance, or use the php proxy provided.
+proxy to your JIRA instance, or use the php proxy provided with some other
+server. If you don't have one handy, you can use Cloud 9: c9.io

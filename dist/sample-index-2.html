@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <title>JIRA Item Creation Form Example</title>
+  <body>
+    <form ng-controller="FormController as fc">
+      <input ng-model="fc.itemName">
+      <button ng-click="fc.createItem()">Create Item</button>
+    </form>
+    <link href="jira-form-styles-without-bootstrap.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-messages.js"></script>
+    <script src="jira-form-app.js"></script>
+    <script>
+      angular.module('myApp', ['jiracreate'])
+      .config(function (JIRAProvider){
+        JIRAProvider.setServer('https://your-jira.atlassian.net');
+        JIRAProvider.setProxy('/jira-form-proxy.php?url=');
+      })
+          .controller('FormController', function (JIRA, $http) {
+              var formController = this;
+              formController.createItem = function () {
+              var issue = JIRA.createIssue(formController.itemName, 'Prospect', 'OTST');
+                  issue.fields['customfield_XXXX'] = 'Custom Field info';
+                  JIRA.postItem(issue);
+              }
+          });
+    </script>
+  </body>
+</html>

@@ -1,7 +1,85 @@
 ; (function (angular, jiraConfig, document) {
   'use strict';
+  
+  angular.module('jiraCreate')
+    .provider('JIRA', function () {
+      var jira = {};
+      this.$get = ['$http', '$filter', '$q', function ($http, $filter, $q) {
+        jira.encloseInObject = function (field) {
+          return { value: field };
+        };
+        
+        jira.generateField = function (field, inquiry) {
+          if (field.value) {
+            return field.value;
+          } else if (!inquiry[field.inquiryField]) {
+            return;
+          }
+          var value = field.map ? field.map[inquiry[field.inquiryField]] : inquiry[field.inquiryField];
+          value = field.filter ? field.filter(value) : value;
+          return field.encloseInObject ? jira.encloseInObject(value) : value;
+        };
+        
+        jira.createIssue = function (summary, issueType, project) {
+          return  {
+              fields: {
+                summary: summary,
+                issuetype: {
+                  name: issueType
+                },
+                project:
+                {
+                  key: project
+                }
+              }
+            };
+        }
+        
+        jira.issuePath = jira.issuePath || '/rest/api/2/issue';
+        jira.defaultProxy = jira.defaultProxy || '/jira-form-proxy.php?url=';
+        jira.postItem = function (item, server, proxy) {
+          return $http.post((proxy || jira.defaultProxy) + (server || jira.defaultServer) + jira.issuePath, item);
+        }
+        
+        jira.submitRequest = function (inquiry, config) {
+          if (config.onSubmit) {
+            config.onSubmit();
+          }
+          var summary = angular.isString(config.summary) ? config.summary : config.summary(inquiry),
+              issueType = angular.isString(config.issueType) ? config.issueType : config.issueType(inquiry),
+              project = angular.isString(config.projectKey) ? config.projectKey : config.projectKey(inquiry),
+              issue = jira.createIssue(summary, issueType, project);
+  
+          angular.forEach(config.commonFields, function (fieldMeta, fieldName) {
+            issue.fields[fieldName] = jira.generateField(fieldMeta, inquiry);
+          });
+  
+          if (angular.isDefined(config.issueTypes)) {
+            angular.forEach(config.issueTypes[issue.fields.issuetype.name], function (fieldMeta, fieldName) {
+              issue.fields[fieldName] = jira.generateField(fieldMeta, inquiry);
+            });
+          }
+  
+          issue.fields[config.inquiryDumpField] = $filter('json')(inquiry);
+  
+          return jira.postItem($filter('json')(issue), config.server, config.proxyUrl);
+        };
+        
+        return jira;
+      }];
+      
+      this.setJIRAIssueCreationPath = function (path) {
+        jira.issuePath = path;
+      }
+      this.setServer = function (server) {
+        jira.defaultServer = server;
+      }
+      this.setProxy = function (proxy) {
+        jira.defaultProxy = proxy;
+      }
+    });
 
-  angular.module('jiracreate', ['ngMessages', 'templates'])
+  angular.module('jiraForm', ['ngMessages', 'templates', 'jiraCreate'])
     .controller('InquiryController', function (JIRA, $scope, validateConfig) {
       var that = this;
       that.config = angular.isString($scope.config) ? window[$scope.config] : $scope.config;
@@ -52,54 +130,6 @@
           .finally(function () {
             that.submitting = false;
           });
-      };
-    })
-    .service('JIRA', function ($http, $filter) {
-      this.submitRequest = function (inquiry, config) {
-        if (config.onSubmit) {
-          config.onSubmit();
-        }
-        config.encloseInObject = function (field) {
-          return { value: field };
-        };
-        config.generateField = function (field, inquiry) {
-          if (field.value) {
-            return field.value;
-          } else if (!inquiry[field.inquiryField]) {
-            return;
-          }
-          var value = field.map ? field.map[inquiry[field.inquiryField]] : inquiry[field.inquiryField];
-          value = field.filter ? field.filter(value) : value;
-          return field.encloseInObject ? config.encloseInObject(value) : value;
-        };
-
-        var issue =
-          {
-            fields: {
-              summary: angular.isString(config.summary) ? config.summary : config.summary(inquiry),
-              issuetype: {
-                name: angular.isString(config.issueType) ? config.issueType : config.issueType(inquiry)
-              },
-              project:
-              {
-                key: angular.isString(config.projectKey) ? config.projectKey : config.projectKey(inquiry)
-              }
-            }
-          };
-
-        angular.forEach(config.commonFields, function (fieldMeta, fieldName) {
-          issue.fields[fieldName] = config.generateField(fieldMeta, inquiry);
-        });
-
-        if (angular.isDefined(config.issueTypes)) {
-          angular.forEach(config.issueTypes[issue.fields.issuetype.name], function (fieldMeta, fieldName) {
-            issue.fields[fieldName] = config.generateField(fieldMeta, inquiry);
-          });
-        }
-
-        issue.fields[config.inquiryDumpField] = $filter('json')(inquiry);
-
-        return $http.post(config.proxyUrl + config.server + '/rest/api/2/issue', $filter('json')(issue));
       };
     })
     .directive('inquiryForm', function () {
@@ -175,7 +205,7 @@
     // Manually bootstrap onto element since there are no auto bootstrapped apps to do it for us
     angular.element(document).ready(function () {
       angular.forEach(document.getElementsByTagName('inquiry-form'), function (el) {
-        angular.bootstrap(el, ['jiracreate']);
+        angular.bootstrap(el, ['jiraForm']);
       });
     });
   }
