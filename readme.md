@@ -60,6 +60,8 @@ look like. Each object has a number of fields.
     placeholder - The string that will be the placeholder text for text inputs
     
     maxlength - A number that becomes the maxlength for the text inputs
+    
+    default - if provided, this will be used as the default value
 
 commonFields - An object whose fields are objects describing the JIRA fields that
 are common accross all the types of issues that this form will create. The name
