@@ -11,6 +11,9 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
       that.config = angular.isString($scope.config) ? window[$scope.config] : $scope.config;
       var defaultInquiry = {};
       that.inquiry = angular.copy(defaultInquiry);
+      angular.forEach(that.config.formFields, function (field) {
+        that.inquiry[field.inquiryField] = field.default;
+      });
       that.message = {};
       that.failureContact = that.config.errorContact
       if (!validateConfig(that.config)) {
