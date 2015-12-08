@@ -8,9 +8,9 @@ html(ng-app='myApp')
     link(href='jira-form-styles-without-bootstrap.css', rel='stylesheet')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-messages.js')
-    script(src='jira-form-app.js')
+    script(src="jiraCreate.min.js")
     script.
-      angular.module('myApp', ['jiracreate'])
+      angular.module('myApp', ['jiraCreate'])
       .config(function (JIRAProvider){
         JIRAProvider.setServer('https://your-jira.atlassian.net');
         JIRAProvider.setProxy('/jira-form-proxy.php?url=');

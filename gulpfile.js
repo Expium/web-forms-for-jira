@@ -17,7 +17,7 @@ gulp.task('serve', function () {
     });
 });
 
-gulp.task('build', ['minifyJs', 'copyHtml', 'copyPhp', 'less', 'copyJS']);
+gulp.task('build', ['minifyFormJs', 'minifyCreateJs','copyHtml', 'copyPhp', 'less', 'copyJS']);
 
 gulp.task('clean', function (cb) {
     del([
@@ -35,7 +35,7 @@ gulp.task('jade', ['clean'], function () {
 });
 
 gulp.task('copyHtml',['jade'], function () {
-    gulp.src(['./build/sample-index.html','./build/sample-index-2.html', './build/abc-example.html', './build/prospect-example.html'])
+    gulp.src(['./build/sample-index.html','./build/sample-index-2.html'])
         .pipe(gulp.dest('./dist'));
 });
 
@@ -49,26 +49,33 @@ gulp.task('htmlToJs', ['jade'], function () {
 });
 
 gulp.task('concat', ['htmlToJs'], function () {
-    return gulp.src(['./build/form.html.js', './app/app.js'])
-        .pipe(concat('jira-form-app.js'))
+    return gulp.src(['./build/form.html.js', './app/jiraForm.js'])
+        .pipe(concat('jiraForm.js'))
         .pipe(gulp.dest('./build/'));
 });
 
 gulp.task('annotate', ['concat'], function () {
-    return gulp.src('build/jira-form-app.js')
+    return gulp.src(['build/jiraForm.js', 'app/jiraCreate.js'])
         .pipe(annotate())
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('minifyJs', ['annotate'], function (){
-    return gulp.src('./build/jira-form-app.js')
+gulp.task('minifyFormJs', ['annotate'], function (){
+    return gulp.src('./build/jiraForm.js')
         .pipe(uglify())
-        .pipe(rename('jira-form-app.min.js'))
+        .pipe(rename('jiraForm.min.js'))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('minifyCreateJs', ['annotate'], function (){
+    return gulp.src('./build/jiraCreate.js')
+        .pipe(uglify())
+        .pipe(rename('jiraCreate.min.js'))
         .pipe(gulp.dest('dist'));
 });
 
 gulp.task('copyJS', ['annotate'], function () {
-    return gulp.src('./build/jira-form-app.js')
+    return gulp.src(['./build/jiraCreate.js', './build/jiraForm.js'])
         .pipe(gulp.dest('dist'));
 })
 

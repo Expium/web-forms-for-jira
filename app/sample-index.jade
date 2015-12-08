@@ -5,8 +5,8 @@ body
     inquiry-form(config='"jiraConfig"')
     // If you want additional forms on the page, you just need to add them with their own IDs
     // #inquiry2(inquiry-form)
-    script(defer, src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.min.js")
-    script(defer, src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-messages.min.js")
+    script(defer, src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.js")
+    script(defer, src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular-messages.js")
     script.
         var jiraConfig =  {
             "errorContact": 'error@example.com',
@@ -82,4 +82,5 @@ body
             "summary": "name",
             "projectKey": "PJCT"
         };
-    script(defer, src="jira-form-app.js")
+    script(defer, src="jiraForm.min.js")
+    script(defer, src="jiraCreate.min.js")
