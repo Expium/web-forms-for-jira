@@ -1,17 +1,17 @@
 {
-  "name": "jira-item-form",
+  "name": "web-forms-for-jira",
   "version": "0.0.14",
   "authors": [
-    "Jack Balbes <jack.balbes@oasisdigital.com>"
+    "Jack Balbes <jack.balbes@expium.com>"
   ],
-  "description": "A lib for creating forms that create JIRA items upon submission",
+  "description": "Angular form for websites to take inquiries and post to a JIRA instance",
   "main": "",
   "moduleType": [],
   "keywords": [
     "JIRA"
   ],
   "license": "MIT",
-  "homepage": "https://bitbucket.org/oasisdigital/jira-inquiry-form",
+  "homepage": "https://github.com/expium/web-forms-for-jira",
   "ignore": [
     "app",
     ".gitignore",

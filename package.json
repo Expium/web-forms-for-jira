@@ -1,16 +1,16 @@
 {
-  "name": "jira-item-form",
+  "name": "web-forms-for-jira",
   "version": "0.0.14",
-  "description": "Angular form for sticking in websites to take inquiries and post to a JIRA instance",
+  "description": "Angular form for websites to take inquiries and post to a JIRA instance",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OasisDigital/jira-item-form"
+    "url": "https://github.com/Expium/web-forms-for-jira"
   },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Oasis Digital",
+  "author": "Expium",
   "license": "MIT",
   "devDependencies": {
     "del": "^1.2.1",
