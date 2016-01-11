@@ -1,6 +1,6 @@
 {
   "name": "web-forms-for-jira",
-  "version": "0.0.14",
+  "version": "1.0.0",
   "description": "Angular form for websites to take inquiries and post to a JIRA instance",
   "repository": {
     "type": "git",
