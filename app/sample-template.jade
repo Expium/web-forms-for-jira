@@ -1,0 +1,16 @@
+span(ng-show="wffj.showFailureMessage")
+    h2 Something went wrong. If you continue to see this message, please contact us at {{wffj.failureContact}}
+.well.bs-component(ng-show="!wffj.showFailureMessage")
+    form.form-horizontal#ss-form(name='ssForm', ng-submit='wffj.submit()', novalidate)
+        .form-group
+            input(placeholder="name",name="name", ng-model="wffj.inquiry.name")
+            select(name="type", ng-model="wffj.inquiry.issueType")
+                option(value="Bug") Bug
+                option(value="New Feature") New Feature
+            input(type='hidden', name='draftResponse', value='[]\
+            ')
+            input(type='hidden', name='pageHistory', value='0')
+            br
+            input.btn.btn-primary#ss-submit(type='submit', name='submit', value='{{wffj.submitting ? "Submitting" : "Submit"}}', ng-disabled='ssForm.$invalid || wffj.submitting')
+        span.text-success(ng-bind='wffj.message.success')
+        span.text-danger( ng-show="wffj.message.error", ng-bind='wffj.message.error + " If you continue to see this error, contact us at " + wffj.failureContact', role='alert')

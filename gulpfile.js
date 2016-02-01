@@ -35,7 +35,12 @@ gulp.task('jade', ['clean'], function () {
 });
 
 gulp.task('copyHtml',['jade'], function () {
-    gulp.src(['./build/sample-index.html','./build/sample-index-2.html'])
+    gulp.src([
+            './build/sample-index.html',
+            './build/sample-index-2.html',
+            './build/sample-index-3.html',
+            './build/sample-template.html'
+        ])
         .pipe(gulp.dest('./dist'));
 });
 

@@ -1,0 +1,16 @@
+<span ng-show="wffj.showFailureMessage">
+  <h2>Something went wrong. If you continue to see this message, please contact us at {{wffj.failureContact}}</h2></span>
+<div ng-show="!wffj.showFailureMessage" class="well bs-component">
+  <form id="ss-form" name="ssForm" ng-submit="wffj.submit()" novalidate="novalidate" class="form-horizontal">
+    <div class="form-group">
+      <input placeholder="name" name="name" ng-model="wffj.inquiry.name"/>
+      <select name="type" ng-model="wffj.inquiry.issueType">
+        <option value="Bug">Bug</option>
+        <option value="New Feature">New Feature</option>
+      </select>
+      <input type="hidden" name="draftResponse" value="[]            "/>
+      <input type="hidden" name="pageHistory" value="0"/><br/>
+      <input id="ss-submit" type="submit" name="submit" value="{{wffj.submitting ? &quot;Submitting&quot; : &quot;Submit&quot;}}" ng-disabled="ssForm.$invalid || wffj.submitting" class="btn btn-primary"/>
+    </div><span ng-bind="wffj.message.success" class="text-success"></span><span ng-show="wffj.message.error" ng-bind="wffj.message.error + &quot; If you continue to see this error, contact us at &quot; + wffj.failureContact" role="alert" class="text-danger"></span>
+  </form>
+</div>

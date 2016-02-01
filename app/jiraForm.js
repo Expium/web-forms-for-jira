@@ -52,9 +52,10 @@
       return {
         restrict: 'E',
         templateUrl: 'form.html',
-        controller: 'InquiryController as inquiryController',
+        controller: 'InquiryController as wffj',
         scope: {
-          config: "="
+          config: "=",
+          template: "@"
         }
       };
     })
