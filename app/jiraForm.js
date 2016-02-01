@@ -3,54 +3,48 @@
 
   angular.module('jiraForm', ['ngMessages', 'templates', 'jiraCreate'])
     .controller('InquiryController', function (JIRA, $scope, validateConfig) {
-      var that = this;
-      that.config = angular.isString($scope.config) ? window[$scope.config] : $scope.config;
+      var wffj = this;
+      wffj.config = angular.isString($scope.config) ? window[$scope.config] : $scope.config;
       var defaultInquiry = {};
-      that.inquiry = angular.copy(defaultInquiry);
-      angular.forEach(that.config.formFields, function (field) {
-        that.inquiry[field.inquiryField] = field.default;
+      wffj.inquiry = angular.copy(defaultInquiry);
+      angular.forEach(wffj.config.formFields, function (field) {
+        wffj.inquiry[field.inquiryField] = field.default;
       });
-      that.message = {};
-      that.failureContact = that.config.errorContact
-      if (!validateConfig(that.config)) {
-        that.showFailureMessage = true;
+      wffj.message = {};
+      wffj.failureContact = wffj.config.errorContact
+      if (!validateConfig(wffj.config)) {
+        wffj.showFailureMessage = true;
         return;
       }
-      angular.forEach(that.config.formFields, function (f) {
+      angular.forEach(wffj.config.formFields, function (f) {
         if (f.default) {
-          that.inquiry[f.inquiryField] = f.default;
+          wffj.inquiry[f.inquiryField] = f.default;
         }
       });
 
       function handleError(error) {
         if (error.status != undefined) {
-          that.message.error = error.status == 0 ? "The server couldn't be reached" : 'Failed to access server with return status: ' + error.statusText;
+          wffj.message.error = error.status == 0 ? "The server couldn't be reached" : 'Failed to access server with return status: ' + error.statusText;
         } else {
-          that.message.error = error;
+          wffj.message.error = error;
         }
       }
 
-      that.submit = function () {
-        that.message.success = undefined;
-        that.message.error = undefined;
-        that.submitting = true;
+      wffj.submit = function () {
+        wffj.message.success = undefined;
+        wffj.message.error = undefined;
+        wffj.submitting = true;
 
-        JIRA.submitRequest(that.inquiry, that.config)
-          .then(function (response){
-            var data = response.data;
-            if (!(angular.isObject(data) && angular.isString(data.self) && angular.isString(data.key)&& angular.isString(data.id))) {
-              throw 'Got success, but response does not match expectation.';
-            }
-          })
+        JIRA.submitRequest(wffj.inquiry, wffj.config)
           .then(function () {
-            that.message.success = 'Request has been submitted successfully';
-            that.inquiry = angular.copy(defaultInquiry);
+            wffj.message.success = 'Request has been submitted successfully';
+            wffj.inquiry = angular.copy(defaultInquiry);
             $scope.ssForm.$setPristine();
             $scope.ssForm.$setUntouched();
           })
           .catch(handleError)
           .finally(function () {
-            that.submitting = false;
+            wffj.submitting = false;
           });
       };
     })

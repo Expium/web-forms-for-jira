@@ -60,8 +60,17 @@
   
           issue.fields[config.inquiryDumpField] = $filter('json')(inquiry);
   
-          return jira.postItem($filter('json')(issue), config.server, config.proxyUrl);
+          return jira.postItem($filter('json')(issue), config.server, config.proxyUrl)
+            .then(jira.checkSuccessValidity);
         };
+        
+        jira.checkSuccessValidity = function (response){
+            var data = response.data;
+            if (!(angular.isObject(data) && angular.isString(data.self) && angular.isString(data.key)&& angular.isString(data.id))) {
+              throw 'Got success, but response does not match expectation.';
+            }
+            return response;
+          };
         
         return jira;
       }];
