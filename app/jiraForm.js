@@ -39,8 +39,8 @@
           .then(function () {
             wffj.message.success = 'Request has been submitted successfully';
             wffj.inquiry = angular.copy(defaultInquiry);
-            $scope.ssForm.$setPristine();
-            $scope.ssForm.$setUntouched();
+            wffj.ssForm.$setPristine();
+            wffj.ssForm.$setUntouched();
           })
           .catch(handleError)
           .finally(function () {

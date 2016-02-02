@@ -2,7 +2,7 @@ span(ng-if="template", ng-include="template")
 span(ng-show="wffj.showFailureMessage", ng-if="!template")
     h2 Something went wrong. If you continue to see this message, please contact us at {{wffj.failureContact}}
 .well.bs-component(ng-show="!wffj.showFailureMessage", ng-if="!template")
-    form.form-horizontal#ss-form(name='ssForm', ng-submit='wffj.submit()', novalidate)
+    form.form-horizontal#ss-form(name='wffj.ssForm', ng-submit='wffj.submit()', novalidate)
         fieldset
             legend {{wffj.config.title}}
             .form-group(ng-repeat='input in wffj.config.formFields', ng-switch="input.type")
