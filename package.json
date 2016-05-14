@@ -8,9 +8,11 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "gulp clean",
+    "build": "gulp build"
   },
-  "author": "Expium",
+  "author": "Expium LLC",
   "license": "MIT",
   "devDependencies": {
     "del": "1.2.1",
