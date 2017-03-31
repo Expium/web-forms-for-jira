@@ -87,6 +87,10 @@ Purely for programmer convenience
 don't set a relationship between an input on the form and a field of the
 JIRA item, you will still have a complete record of the request
 
+* retryOnError - If the form gets an error attempting to create your issue,
+the form will retry, only filling in the issue name and the inquiryDumpField,
+as described above
+
 * formFields - An array of objects specifying what each field in the form will
 look like. Each object has a number of fields.
     

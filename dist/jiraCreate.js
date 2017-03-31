@@ -61,7 +61,25 @@
           issue.fields[config.inquiryDumpField] = $filter('json')(inquiry);
   
           return jira.postItem($filter('json')(issue), config.server, config.proxyUrl)
-            .then(jira.checkSuccessValidity);
+            .then(jira.checkSuccessValidity)
+            .catch(function (e) {
+              if (!config.retryOnError) {
+                return $q.reject(e);
+              }
+              var simpleIssue = {
+                fields: {
+                  summary: "Error from form",
+                  issuetype: {
+                    name: issueType
+                  },
+                  project: {
+                    key: project
+                  }
+                }
+              };
+              simpleIssue[config.inquiryDumpField] = issue.fields[config.inquiryDumpField] + "\n\n" + $filter('json')(err);
+              return jira.postItem($filter('json')(simpleIssue), config.server, config.proxyUrl)
+            });
         };
         
         jira.checkSuccessValidity = function (response){
