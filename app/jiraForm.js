@@ -20,11 +20,6 @@
         wffj.showFailureMessage = true;
         return;
       }
-      angular.forEach(wffj.config.formFields, function (f) {
-        if (f.default) {
-          wffj.inquiry[f.inquiryField] = f.default;
-        }
-      });
 
       function handleError(error) {
         if (error.status != undefined) {
