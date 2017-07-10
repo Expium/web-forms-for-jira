@@ -12,7 +12,11 @@ angular.module('templates',[]).run(['$templateCache', function($templateCache) {
       var defaultInquiry = {};
       wffj.inquiry = angular.copy(defaultInquiry);
       angular.forEach(wffj.config.formFields, function (field) {
-        wffj.inquiry[field.inquiryField] = field.default;
+        if (field.default && field.default.then) {
+          field.default.then(function (val) { wffj.inquiry[field.inquiryField] = val })
+        } else {
+          wffj.inquiry[field.inquiryField] = field.default;
+        }
       });
       wffj.message = {};
       wffj.failureContact = wffj.config.errorContact
